@@ -23,11 +23,14 @@ const timetableEventResponseSchema = z
         "Faculty department for the event, or null when not applicable",
       examples: ["COMPUTER_SCIENCE", null],
     }),
-    directions: z.array(z.string()).nullable().meta({
-      description:
-        "Study directions or tracks for the event, or null when not applicable",
-      examples: [["Software Engineering"], null],
-    }),
+    directions: z
+      .array(z.string())
+      .nullable()
+      .meta({
+        description:
+          "Study directions or tracks for the event, or null when not applicable",
+        examples: [["Software Engineering"], null],
+      }),
     endDateTime: z.iso.datetime().meta({
       description: "Event end time in UTC",
       examples: ["2024-03-15T10:00:00.000Z"],
@@ -58,13 +61,13 @@ const timetableEventResponseSchema = z
       examples: [[101]],
     }),
     teacherNames: z.array(z.string()).meta({
-      description:
-        "Human-readable teacher names, parallel to teacherIds",
+      description: "Human-readable teacher names, parallel to teacherIds",
       examples: [["Jane Doe"]],
     }),
     type: timetableEventTypeSchema,
     year: timetableEventYearSchema.nullable().meta({
-      description: "Target study year for the event, or null when not applicable",
+      description:
+        "Target study year for the event, or null when not applicable",
       examples: ["FIRST", null],
     }),
   })

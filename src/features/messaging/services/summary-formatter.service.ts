@@ -22,20 +22,25 @@ export function buildDetailLines(difference: TimetableDifferenceDto): string[] {
 }
 
 export function buildSummary(difference: TimetableDifferenceDto): string {
-  if (difference.newEvents.length === 0 && difference.removedEvents.length === 0) {
+  if (
+    difference.newEvents.length === 0 &&
+    difference.removedEvents.length === 0
+  ) {
     return "No timetable changes detected.";
   }
 
   const summaryParts = [
     formatCount(difference.newEvents.length, "added class"),
     formatCount(difference.removedEvents.length, "removed class"),
-  ].filter((part) => part.length > 0);
+  ].filter(part => part.length > 0);
 
   const detailLines = buildDetailLines(difference);
   const summary = summaryParts.length > 0 ? `${summaryParts.join(", ")}.` : "";
 
   if (detailLines.length === 0) return summary;
-  return summary ? `${summary} ${detailLines.join("; ")}` : detailLines.join("; ");
+  return summary
+    ? `${summary} ${detailLines.join("; ")}`
+    : detailLines.join("; ");
 }
 
 export function buildSummaryBody(difference: TimetableDifferenceDto): string {
@@ -49,25 +54,35 @@ export function buildSummaryTitle(difference: TimetableDifferenceDto): string {
 
   if (newEvents.length > 0) {
     parts.push(
-      `${newEvents.length.toString()} ${newEvents.length === 1 ? "new class" : "new classes"}`,
+      `${newEvents.length.toString()} ${newEvents.length === 1 ? "new class" : "new classes"}`
     );
   }
   if (removedEvents.length > 0) {
     parts.push(`${removedEvents.length.toString()} removed`);
   }
 
-  return parts.length > 0 ? `Timetable: ${parts.join(" · ")}` : "Timetable updated";
+  return parts.length > 0
+    ? `Timetable: ${parts.join(" · ")}`
+    : "Timetable updated";
 }
 
-export function trimLength(value: string, maxLength = SUMMARY_MAX_LENGTH): string {
+export function trimLength(
+  value: string,
+  maxLength = SUMMARY_MAX_LENGTH
+): string {
   if (value.length <= maxLength) return value;
   return `${value.slice(0, maxLength - 1)}…`;
 }
 
-function addDetails(events: TimetableEventDto[], prefix: string, lines: string[]): void {
+function addDetails(
+  events: TimetableEventDto[],
+  prefix: string,
+  lines: string[]
+): void {
   const sorted = [...events].sort(
     (a, b) =>
-      a.startDateTime.localeCompare(b.startDateTime) || a.name.localeCompare(b.name),
+      a.startDateTime.localeCompare(b.startDateTime) ||
+      a.name.localeCompare(b.name)
   );
 
   for (const event of sorted) {
@@ -75,7 +90,7 @@ function addDetails(events: TimetableEventDto[], prefix: string, lines: string[]
     const room = event.classRoomNames[0];
     const location = room ? ` @${room}` : "";
     lines.push(
-      `${prefix} ${event.name} ${timeFormatter.format(new Date(event.startDateTime))}${location}`,
+      `${prefix} ${event.name} ${timeFormatter.format(new Date(event.startDateTime))}${location}`
     );
   }
 }

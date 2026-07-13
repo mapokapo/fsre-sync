@@ -69,11 +69,12 @@ const cache = createCache<TimetableDto, TimetableKeyDto>(timetableCacheKey);
 const slot = createCache<TimetableDatabaseDto>(() => "__singleton__");
 ```
 
-Feature modules export a production singleton (one-liner over `createCache`); see
-[`timetable-cache.ts`](../src/features/timetable/helpers/timetable-cache.ts) and
+Feature modules export a production singleton (one-liner over `createCache`);
+see [`timetable-cache.ts`](../src/features/timetable/helpers/timetable-cache.ts)
+and
 [`timetable-database-cache.ts`](../src/features/timetable-database/helpers/timetable-database-cache.ts).
-For isolated instances in tests, call `createCache` with the same `keyMapper`, or
-`mock.module` the feature helper.
+For isolated instances in tests, call `createCache` with the same `keyMapper`,
+or `mock.module` the feature helper.
 
 Caches are ephemeral by design — never persist to disk.
 

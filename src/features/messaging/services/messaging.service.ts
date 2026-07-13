@@ -39,7 +39,9 @@ export async function sendTimetableUpdate(
   );
 }
 
-export async function subscribe(dto: SubscribeDto): Promise<MessagingSubscriptionDto> {
+export async function subscribe(
+  dto: SubscribeDto
+): Promise<MessagingSubscriptionDto> {
   const existing = await messagingRepository.findByEmailAndFcmToken(
     dto.email,
     dto.fcmToken

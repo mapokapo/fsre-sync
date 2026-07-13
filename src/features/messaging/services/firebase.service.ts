@@ -18,7 +18,7 @@ export function initializeFirebase(): void {
 
   if (!config.firebase.credentialsPath) {
     logger.warn(
-      "GOOGLE_APPLICATION_CREDENTIALS not set, Firebase will not be initialized.",
+      "GOOGLE_APPLICATION_CREDENTIALS not set, Firebase will not be initialized."
     );
     return;
   }

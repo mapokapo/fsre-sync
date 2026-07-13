@@ -17,8 +17,11 @@ const EVENT_EQUALITY_KEYS = [
   "teacherNames",
 ] as const satisfies readonly (keyof TimetableEventDto)[];
 
-export function eventsEqual(a: TimetableEventDto, b: TimetableEventDto): boolean {
-  return EVENT_EQUALITY_KEYS.every((key) => {
+export function eventsEqual(
+  a: TimetableEventDto,
+  b: TimetableEventDto
+): boolean {
+  return EVENT_EQUALITY_KEYS.every(key => {
     const left = a[key];
     const right = b[key];
 

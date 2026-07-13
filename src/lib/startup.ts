@@ -22,9 +22,9 @@ export async function runStartup(): Promise<void> {
 
   logger.info(`Warming timetable cache for ${keys.length.toString()} keys...`);
   await Promise.all(
-    keys.map(async (key) => {
+    keys.map(async key => {
       setTimetable(key, await fetchTimetable(key));
-    }),
+    })
   );
   logger.info("Timetable cache populated!");
 }

@@ -17,11 +17,11 @@ export class MessagingSubscriptionAlreadyRegistered extends ServiceError {
   constructor(
     public readonly email: null | string,
     public readonly fcmToken: null | string,
-    public readonly studyProgramId: number,
+    public readonly studyProgramId: number
   ) {
     super(
       ServiceErrorCode.MESSAGING_SUBSCRIPTION_ALREADY_REGISTERED,
-      `Subscription already registered for study program ${studyProgramId.toString()}`,
+      `Subscription already registered for study program ${studyProgramId.toString()}`
     );
   }
 }

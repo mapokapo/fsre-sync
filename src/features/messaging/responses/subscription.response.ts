@@ -20,14 +20,20 @@ export const subscriptionResponseSchema = z
       description: "Client device metadata captured at subscribe time",
       examples: ["Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36"],
     }),
-    email: z.string().nullable().meta({
-      description: "Subscribed email address, or null when using FCM only",
-      examples: [OPENAPI_EMAIL_EXAMPLE, null],
-    }),
-    fcmToken: z.string().nullable().meta({
-      description: "Subscribed FCM token, or null when using email only",
-      examples: [OPENAPI_FCM_TOKEN_EXAMPLE, null],
-    }),
+    email: z
+      .string()
+      .nullable()
+      .meta({
+        description: "Subscribed email address, or null when using FCM only",
+        examples: [OPENAPI_EMAIL_EXAMPLE, null],
+      }),
+    fcmToken: z
+      .string()
+      .nullable()
+      .meta({
+        description: "Subscribed FCM token, or null when using email only",
+        examples: [OPENAPI_FCM_TOKEN_EXAMPLE, null],
+      }),
     id: z.uuid().meta({
       description: "Subscription UUID",
       examples: [OPENAPI_SUBSCRIPTION_ID_EXAMPLE],
@@ -49,7 +55,7 @@ export const subscriptionResponseSchema = z
 export type SubscriptionResponse = z.infer<typeof subscriptionResponseSchema>;
 
 export function toSubscriptionResponse(
-  dto: MessagingSubscriptionDto,
+  dto: MessagingSubscriptionDto
 ): SubscriptionResponse {
   return {
     createdAt: dto.createdAt.toISOString(),

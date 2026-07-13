@@ -17,7 +17,7 @@ export type MessagingSubscriptionInsert =
 export type MessagingSubscriptionRow = Selectable<MessagingSubscriptionsTable>;
 
 export function toMessagingSubscriptionEntity(
-  row: MessagingSubscriptionRow,
+  row: MessagingSubscriptionRow
 ): MessagingSubscriptionEntity {
   return {
     createdAt: new Date(row.created_at),
@@ -32,7 +32,7 @@ export function toMessagingSubscriptionEntity(
 }
 
 export function toMessagingSubscriptionRow(
-  entity: MessagingSubscriptionEntity,
+  entity: MessagingSubscriptionEntity
 ): MessagingSubscriptionInsert {
   return {
     created_at: entity.createdAt.toISOString(),

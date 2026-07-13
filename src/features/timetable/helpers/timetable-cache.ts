@@ -8,5 +8,5 @@ export function timetableCacheKey(key: TimetableKeyDto): string {
 }
 
 export const timetableCache = createCache<TimetableDto, TimetableKeyDto>(
-  timetableCacheKey,
+  timetableCacheKey
 );

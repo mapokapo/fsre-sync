@@ -14,7 +14,7 @@ import {
 
 export async function sendFcmNotification(
   fcmToken: string,
-  message: TimetableUpdatedMessageDto,
+  message: TimetableUpdatedMessageDto
 ): Promise<void> {
   try {
     const { difference, timetableKey } = message;
@@ -42,7 +42,7 @@ export async function sendFcmNotification(
   } catch (error) {
     throw new FcmSendMessageFailed(
       error instanceof Error ? error.message : "FCM send failed",
-      error,
+      error
     );
   }
 }

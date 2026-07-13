@@ -134,8 +134,7 @@ export async function refreshTimetables(): Promise<void> {
 }
 
 function formatSubscriptionRef(subscription: MessagingSubscriptionDto): string {
-  const channel =
-    subscription.fcmToken ?? subscription.email ?? "no channel";
+  const channel = subscription.fcmToken ?? subscription.email ?? "no channel";
   return `subscription ${subscription.id} (studyProgram ${subscription.studyProgramId.toString()}, ${channel})`;
 }
 

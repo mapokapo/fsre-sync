@@ -47,7 +47,7 @@ const SERVICE_ERROR_HTTP_MAP: Partial<
 
 export function handleServiceError(
   error: unknown,
-  set: { status?: number | string },
+  set: { status?: number | string }
 ): FsreError | undefined {
   if (!(error instanceof ServiceError)) return undefined;
 
@@ -61,6 +61,6 @@ export function handleServiceError(
     typeof mapping.message === "function"
       ? mapping.message(error)
       : mapping.message,
-    mapping.details?.(error),
+    mapping.details?.(error)
   );
 }

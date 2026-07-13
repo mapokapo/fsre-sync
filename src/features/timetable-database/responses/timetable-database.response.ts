@@ -37,10 +37,13 @@ const idNamePairStringSchema = z
 const studyProgramResponseSchema = z
   .object({
     department: timetableEventDepartmentSchema,
-    direction: z.string().nullable().meta({
-      description: "Study direction or track, or null when not applicable",
-      examples: ["Software Engineering", null],
-    }),
+    direction: z
+      .string()
+      .nullable()
+      .meta({
+        description: "Study direction or track, or null when not applicable",
+        examples: ["Software Engineering", null],
+      }),
     id: z.number().meta({
       description: "Edupage study program identifier",
       examples: [OPENAPI_STUDY_PROGRAM_ID_EXAMPLE],
@@ -95,7 +98,7 @@ export type TimetableDatabaseResponse = z.infer<
 >;
 
 export function toTimetableDatabaseResponse(
-  dto: TimetableDatabaseDto,
+  dto: TimetableDatabaseDto
 ): TimetableDatabaseResponse {
   return dto;
 }

@@ -13,9 +13,11 @@ export interface SingletonCache<V> {
 }
 
 export function createCache<V>(keyMapper: () => string): SingletonCache<V>;
-export function createCache<V, K>(keyMapper: (key: K) => string): KeyedCache<K, V>;
 export function createCache<V, K>(
-  keyMapper: (() => string) | ((key: K) => string),
+  keyMapper: (key: K) => string
+): KeyedCache<K, V>;
+export function createCache<V, K>(
+  keyMapper: (() => string) | ((key: K) => string)
 ): KeyedCache<K, V> | SingletonCache<V> {
   const store = new Map<string, V>();
 

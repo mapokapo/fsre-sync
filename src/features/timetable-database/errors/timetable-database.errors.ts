@@ -8,7 +8,7 @@ export class TimetableDatabaseFetchFailed extends ServiceError {
       cause instanceof Error
         ? cause.message
         : "Failed to fetch timetable database",
-      cause,
+      cause
     );
   }
 }
@@ -17,7 +17,7 @@ export class TimetableDatabaseNotLoaded extends ServiceError {
   constructor() {
     super(
       ServiceErrorCode.TIMETABLE_DATABASE_NOT_LOADED,
-      "Timetable database has not been fetched yet",
+      "Timetable database has not been fetched yet"
     );
   }
 }
@@ -29,7 +29,7 @@ export class TimetableDatabaseParseFailed extends ServiceError {
       cause instanceof Error
         ? cause.message
         : "Failed to parse timetable database",
-      cause,
+      cause
     );
   }
 }

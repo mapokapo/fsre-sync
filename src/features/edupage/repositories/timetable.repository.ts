@@ -5,7 +5,7 @@ import { TimetableFetchFailed } from "@/features/timetable/errors/timetable.erro
 
 export async function fetchEdupageTimetable(
   studyProgramId: number,
-  yearWeek: YearWeek,
+  yearWeek: YearWeek
 ): Promise<string> {
   try {
     const response = await fetch(config.edupage.timetableUri, {
@@ -16,7 +16,7 @@ export async function fetchEdupageTimetable(
 
     if (!response.ok) {
       throw new TimetableFetchFailed(
-        new Error(`HTTP ${response.status.toString()}`),
+        new Error(`HTTP ${response.status.toString()}`)
       );
     }
 
@@ -29,7 +29,7 @@ export async function fetchEdupageTimetable(
 
 export function serializeTimetableRequest(
   studyProgramId: number,
-  yearWeek: YearWeek,
+  yearWeek: YearWeek
 ): string {
   const academicYear =
     yearWeek.getWeek() <= 26 ? yearWeek.getYear() - 1 : yearWeek.getYear();

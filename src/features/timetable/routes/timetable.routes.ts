@@ -1,6 +1,9 @@
 import { Elysia } from "elysia";
 
-import { getTimetableQuerySchema, toTimetableKeyDto } from "@/features/timetable/requests/get-timetable.request.ts";
+import {
+  getTimetableQuerySchema,
+  toTimetableKeyDto,
+} from "@/features/timetable/requests/get-timetable.request.ts";
 import {
   timetableResponseSchema,
   toTimetableResponse,
@@ -18,5 +21,5 @@ export const timetableRoutes = new Elysia().get(
     },
     query: getTimetableQuerySchema,
     response: { 200: timetableResponseSchema },
-  },
+  }
 );

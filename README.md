@@ -31,9 +31,9 @@ docker compose build
 docker compose up -d
 ```
 
-The container runs migrations on startup (`entrypoint.sh`), then starts the server.
-SQLite data is persisted in `./data` on the host. Mount your Firebase service
-account at `./service_account_key.json` (see `docker-compose.yml`).
+The container runs migrations on startup (`entrypoint.sh`), then starts the
+server. SQLite data is persisted in `./data` on the host. Mount your Firebase
+service account at `./service_account_key.json` (see `docker-compose.yml`).
 
 Health check: `GET /health` (liveness only; does not probe Edupage or FCM).
 
@@ -64,15 +64,15 @@ OpenAPI UI: `/api/docs`
 
 See `.env.example`.
 
-| Variable                         | Required | Description                                      |
-| -------------------------------- | -------- | ------------------------------------------------ |
-| `SQLITE_PATH`                    | No       | SQLite file path (default `./data/fsre-sync.db`) |
-| `PORT`                           | No       | HTTP port (default `5000`)                       |
-| `MAIL_USERNAME`                  | No       | SMTP username (Gmail) for email notifications    |
-| `MAIL_PASSWORD`                  | No       | SMTP password / app password                     |
-| `GOOGLE_APPLICATION_CREDENTIALS` | No       | Path to Firebase service account JSON            |
-| `EDUPAGE_TIMETABLE_URI`          | No       | Edupage timetable RPC URL (has default)          |
-| `EDUPAGE_TIMETABLE_DB_URI`       | No       | Edupage database RPC URL (has default)           |
+| Variable                         | Required | Description                                          |
+| -------------------------------- | -------- | ---------------------------------------------------- |
+| `SQLITE_PATH`                    | No       | SQLite file path (default `./data/fsre-sync.db`)     |
+| `PORT`                           | No       | HTTP port (default `5000`)                           |
+| `MAIL_USERNAME`                  | No       | SMTP username (Gmail) for email notifications        |
+| `MAIL_PASSWORD`                  | No       | SMTP password / app password                         |
+| `GOOGLE_APPLICATION_CREDENTIALS` | No       | Path to Firebase service account JSON                |
+| `EDUPAGE_TIMETABLE_URI`          | No       | Edupage timetable RPC URL (has default)              |
+| `EDUPAGE_TIMETABLE_DB_URI`       | No       | Edupage database RPC URL (has default)               |
 | `LOG_LEVEL`                      | No       | `debug`, `info`, `warn`, or `error` (default `info`) |
 
 Mail and Firebase are optional; without them, subscriptions still work but

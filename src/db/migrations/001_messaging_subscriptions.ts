@@ -9,12 +9,12 @@ export async function down(db: Kysely<Database>): Promise<void> {
 export async function up(db: Kysely<Database>): Promise<void> {
   await db.schema
     .createTable("messaging_subscriptions")
-    .addColumn("id", "text", (col) => col.primaryKey().notNull())
+    .addColumn("id", "text", col => col.primaryKey().notNull())
     .addColumn("fcm_token", "text")
     .addColumn("email", "text")
-    .addColumn("study_program_id", "integer", (col) => col.notNull())
-    .addColumn("device_info", "text", (col) => col.notNull())
-    .addColumn("created_at", "text", (col) => col.notNull())
+    .addColumn("study_program_id", "integer", col => col.notNull())
+    .addColumn("device_info", "text", col => col.notNull())
+    .addColumn("created_at", "text", col => col.notNull())
     .addColumn("last_notified_at", "text")
     .execute();
 

@@ -11,7 +11,7 @@ export async function fetchEdupageTimetableDatabase(): Promise<string> {
 
     if (!response.ok) {
       throw new TimetableDatabaseFetchFailed(
-        new Error(`HTTP ${response.status.toString()}`),
+        new Error(`HTTP ${response.status.toString()}`)
       );
     }
 

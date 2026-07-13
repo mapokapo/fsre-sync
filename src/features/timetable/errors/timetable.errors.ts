@@ -12,7 +12,7 @@ export class TimetableFetchFailed extends ServiceError {
     super(
       ServiceErrorCode.TIMETABLE_FETCH_FAILED,
       cause instanceof Error ? cause.message : "Failed to fetch timetable",
-      cause,
+      cause
     );
   }
 }
@@ -22,7 +22,7 @@ export class TimetableParseFailed extends ServiceError {
     super(
       ServiceErrorCode.TIMETABLE_PARSE_FAILED,
       cause instanceof Error ? cause.message : "Failed to parse timetable",
-      cause,
+      cause
     );
   }
 }

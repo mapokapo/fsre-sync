@@ -1,6 +1,10 @@
 import { Elysia } from "elysia";
 
-import { subscribeRequestSchema, toSubscribeDto, toUnsubscribeDto } from "@/features/messaging/requests/subscribe.request.ts";
+import {
+  subscribeRequestSchema,
+  toSubscribeDto,
+  toUnsubscribeDto,
+} from "@/features/messaging/requests/subscribe.request.ts";
 import {
   subscriptionResponseSchema,
   toSubscriptionResponse,
@@ -14,7 +18,7 @@ export const messagingRoutes = new Elysia()
     "/messaging/subscribe",
     async ({ body, deviceInfo }) =>
       toSubscriptionResponse(
-        await messagingService.subscribe(toSubscribeDto(body, deviceInfo)),
+        await messagingService.subscribe(toSubscribeDto(body, deviceInfo))
       ),
     {
       body: subscribeRequestSchema,
@@ -23,7 +27,7 @@ export const messagingRoutes = new Elysia()
         tags: ["messaging"],
       },
       response: { 200: subscriptionResponseSchema },
-    },
+    }
   )
   .post(
     "/messaging/unsubscribe",
@@ -35,5 +39,5 @@ export const messagingRoutes = new Elysia()
           "Unsubscribe from a study program for a specific email and/or FCM token",
         tags: ["messaging"],
       },
-    },
+    }
   );

@@ -9,9 +9,7 @@ import {
   lookupStudyProgramName,
 } from "@/features/timetable-database/helpers/lookups.ts";
 import { getTimetableDatabase } from "@/features/timetable-database/services/timetable-database.service.ts";
-import {
-  TimetableFetchFailed,
-} from "@/features/timetable/errors/timetable.errors.ts";
+import { TimetableFetchFailed } from "@/features/timetable/errors/timetable.errors.ts";
 import { timetableCache } from "@/features/timetable/helpers/timetable-cache.ts";
 import {
   deduplicateTimetable,

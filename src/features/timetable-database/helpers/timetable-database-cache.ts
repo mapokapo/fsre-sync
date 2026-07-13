@@ -3,5 +3,5 @@ import type { TimetableDatabaseDto } from "@/features/timetable-database/dtos/ti
 import { createCache } from "@/lib/cache.ts";
 
 export const timetableDatabaseCache = createCache<TimetableDatabaseDto>(
-  () => "__singleton__",
+  () => "__singleton__"
 );

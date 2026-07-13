@@ -9,7 +9,10 @@ import {
 } from "@/features/messaging/entities/messaging-subscription.entity.ts";
 
 export async function deleteById(id: string): Promise<void> {
-  await getDb().deleteFrom("messaging_subscriptions").where("id", "=", id).execute();
+  await getDb()
+    .deleteFrom("messaging_subscriptions")
+    .where("id", "=", id)
+    .execute();
 }
 
 export async function findByEmailAndFcmToken(

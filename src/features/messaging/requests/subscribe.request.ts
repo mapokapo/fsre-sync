@@ -63,7 +63,7 @@ export type SubscribeRequest = z.infer<typeof subscribeRequestSchema>;
 
 export function toSubscribeDto(
   body: SubscribeRequest,
-  deviceInfo: string,
+  deviceInfo: string
 ): SubscribeDto {
   return {
     deviceInfo,
@@ -74,7 +74,7 @@ export function toSubscribeDto(
 }
 
 export function toUnsubscribeDto(
-  body: SubscribeRequest,
+  body: SubscribeRequest
 ): Omit<SubscribeDto, "deviceInfo"> {
   return {
     email: body.email ?? null,

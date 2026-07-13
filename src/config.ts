@@ -8,12 +8,12 @@ const configSchema = z.object({
     timetableDbUri: z
       .url()
       .default(
-        "https://fsre.edupage.org/rpr/server/maindbi.js?__func=mainDBIAccessor",
+        "https://fsre.edupage.org/rpr/server/maindbi.js?__func=mainDBIAccessor"
       ),
     timetableUri: z
       .url()
       .default(
-        "https://fsre.edupage.org/timetable/server/currenttt.js?__func=curentttGetData",
+        "https://fsre.edupage.org/timetable/server/currenttt.js?__func=curentttGetData"
       ),
   }),
   firebase: z.object({

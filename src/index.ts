@@ -13,7 +13,7 @@ app.listen({
 });
 
 logger.info(
-  `FSRE Timetable Notify listening on http://0.0.0.0:${config.port.toString()}/api`,
+  `FSRE Timetable Notify listening on http://0.0.0.0:${config.port.toString()}/api`
 );
 
 scheduleTimetableRefresh();

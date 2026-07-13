@@ -4,7 +4,7 @@ export class ServiceError extends Error {
   constructor(
     readonly code: ServiceErrorCode,
     detail: string,
-    cause?: unknown,
+    cause?: unknown
   ) {
     super(detail, { cause });
     this.name = new.target.name;

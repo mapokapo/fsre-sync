@@ -26,7 +26,7 @@ fileignoreconfig:
 - filename: src/features/timing/services/refresh-timetables.service.ts
   checksum: 8ae0d971c1468c2247c4821c0ea3501c7e9bb8ee1f1770cc5d094e7c6760d02d
 - filename: src/lib/cache.ts
-  checksum: 43e1b64c00b1d30c0403bd0fe54b55d4e1c377409523b44d0111659d477d2914
+  checksum: d3b7206073162cbd7f1f36635c67e13430ad32068f8911fcdcff914674d21ca1
 - filename: src/lib/openapi.ts
   checksum: 8d4fdbd1b46f70dc1457bd9057dc267157d2cdf753304479ec0f680cd66c95f6
 - filename: src/lib/startup.ts

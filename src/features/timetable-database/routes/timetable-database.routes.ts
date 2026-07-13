@@ -11,9 +11,10 @@ export const timetableDatabaseRoutes = new Elysia().get(
   () => toTimetableDatabaseResponse(getTimetableDatabase()),
   {
     detail: {
-      summary: "Get the timetable definitions database for the current study year",
+      summary:
+        "Get the timetable definitions database for the current study year",
       tags: ["timetable-database"],
     },
     response: { 200: timetableDatabaseResponseSchema },
-  },
+  }
 );
