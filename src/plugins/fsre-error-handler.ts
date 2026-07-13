@@ -1,3 +1,5 @@
+import { ParseError, ValidationError } from "elysia";
+
 import {
   ServiceErrorCode,
   type ServiceErrorCode as ServiceErrorCodeType,
@@ -45,6 +47,24 @@ const SERVICE_ERROR_HTTP_MAP: Partial<
   },
 };
 
+export function handleParseError(
+  error: unknown,
+  set: { status?: number | string }
+): FsreError | undefined {
+  if (!(error instanceof ParseError)) return undefined;
+
+  const details =
+    error.cause instanceof Error ? error.cause.message : undefined;
+
+  set.status = error.status;
+  return createFsreError(
+    error.status,
+    "Bad Request",
+    "Failed to parse request body",
+    details
+  );
+}
+
 export function handleServiceError(
   error: unknown,
   set: { status?: number | string }
@@ -62,5 +82,27 @@ export function handleServiceError(
       ? mapping.message(error)
       : mapping.message,
     mapping.details?.(error)
+  );
+}
+
+export function handleValidationError(
+  error: unknown,
+  set: { status?: number | string }
+): FsreError | undefined {
+  if (!(error instanceof ValidationError)) return undefined;
+
+  const firstIssue = error.all[0];
+  const message =
+    firstIssue?.summary ??
+    (typeof firstIssue?.message === "string"
+      ? firstIssue.message
+      : "Request validation failed");
+
+  set.status = error.status;
+  return createFsreError(
+    error.status,
+    "Unprocessable Content",
+    message,
+    error.message
   );
 }

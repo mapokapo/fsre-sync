@@ -9,13 +9,20 @@ import { timetableDatabaseRoutes } from "@/features/timetable-database/routes/ti
 import { timetableRoutes } from "@/features/timetable/routes/timetable.routes.ts";
 import { createFsreError } from "@/lib/errors";
 import { logger } from "@/lib/logger.ts";
-import { handleServiceError } from "@/plugins/fsre-error-handler.ts";
+import {
+  handleParseError,
+  handleServiceError,
+  handleValidationError,
+} from "@/plugins/fsre-error-handler.ts";
 
 export function createApp() {
   const api = new Elysia({ prefix: "/api" })
     .use(cors({ origin: true }))
     .onError(({ error, set }) => {
-      const handled = handleServiceError(error, set);
+      const handled =
+        handleServiceError(error, set) ??
+        handleValidationError(error, set) ??
+        handleParseError(error, set);
       if (handled) return handled;
 
       logger.error("Unhandled error", error);
