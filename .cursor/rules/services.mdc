@@ -1,0 +1,23 @@
+---
+description: Service module patterns — public/private methods, extraction, no test-driven exports
+globs: src/features/**/services/**,src/orchestration/**
+alwaysApply: false
+---
+
+# Services
+
+Services follow an **OOP-inspired module pattern**: exported public functions = the feature API; non-exported functions = private helpers.
+
+**Semantic single responsibility** — `refreshTimetables` orchestrating many steps is fine; `fetchAndDiffThenCache` is not (name reveals mixed concerns).
+
+**Extraction — use judgment, not reflex:**
+- Extract when: 2+ real call sites, file is unreadable, or DRY is obvious.
+- **Do not** extract a one-liner wrapper used in 2 places — call the underlying function twice.
+- **Do not** create `helpers/` files for single-use code — keep it in the service file.
+- **Do not** export privates purely for tests. Test via public API + `mock.module`, or export only when tests would otherwise be giant/unreadable (then unit-test the export and mock it in parent tests).
+
+**No testability hacks:** no optional `deps` bags, no injected interfaces in production signatures. See `test/README.md` — `mock.module`, `createDb(':memory:')`.
+
+**Services never know HTTP exists** — no status codes, no `FsreError`, no Elysia types.
+
+**Repositories own infra failures** — catch driver/fetch errors at repo boundary, rethrow as feature `ServiceError` subclass.

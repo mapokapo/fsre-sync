@@ -1,0 +1,39 @@
+{
+  "name": "fsre-sync",
+  "private": true,
+  "scripts": {
+    "db:migrate": "bun run src/db/migrate-cli.ts",
+    "dev": "bun run --watch src/index.ts",
+    "start": "bun run src/index.ts",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/bun": "^1.3.14",
+    "@types/nodemailer": "^8.0.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-perfectionist": "^5.9.1",
+    "globals": "^17.7.0",
+    "prettier": "^3.9.4",
+    "typescript-eslint": "^8.62.2-alpha.5"
+  },
+  "peerDependencies": {
+    "typescript": "^6.0.3"
+  },
+  "dependencies": {
+    "@elysiajs/cors": "^1.4.2",
+    "@elysiajs/openapi": "^1.4.15",
+    "date-fns": "^4.4.0",
+    "date-fns-tz": "^3.2.0",
+    "elysia": "^1.4.29",
+    "firebase-admin": "^14.1.0",
+    "kysely": "^0.29.2",
+    "nodemailer": "^9.0.3",
+    "zod": "^4.4.3"
+  }
+}

@@ -1,0 +1,26 @@
+---
+description: Thin routes, Zod mappers in requests/responses, Elysia plugin wiring
+globs: src/features/**/routes/**,src/features/**/requests/**,src/features/**/responses/**,src/app.ts
+alwaysApply: false
+---
+
+# Routes & HTTP layer
+
+**Routes are thin controllers only:**
+
+```typescript
+// ✅
+const dto = toSubscribeDto(body);
+const result = await messagingService.subscribe(dto);
+return toSubscriptionResponse(result);
+
+// ❌ business logic, DB calls, or DTO mapping in routes
+```
+
+**Mapping lives in `requests/` and `responses/`**, not in `dtos/` or services.
+
+**Elysia wiring:** `app.ts` registers `onError` → `handleServiceError` **before** `.use(routePlugins)` (AOT ordering matters).
+
+**Feature routes** export Elysia plugins from `routes/*.routes.ts`; composition root imports them in `app.ts`.
+
+**OpenAPI:** Zod schemas in requests/responses with `.meta()` for OpenAPI fields.

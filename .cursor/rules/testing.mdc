@@ -1,0 +1,22 @@
+---
+description: Test conventions — mirror layout, mock.module, no production DI
+globs: test/**,src/**/*.ts
+alwaysApply: false
+---
+
+# Testing
+
+Mirror `src/` under `test/` (see `test/README.md`). Run: `bun test`.
+
+**Do not shape production code for tests** — no `deps` optional params, no `@test-export` markers.
+
+| Layer | Approach |
+|-------|----------|
+| Pure helpers (`event-equality`, `diffTimetables`, `YearWeek`, `to*Dto`) | Import directly, assert |
+| Services | `mock.module` repos/caches/senders; test public exports |
+| Repositories | `createDb(':memory:')` + migrations; mock `getDb` if needed |
+| Private helpers | Test via public caller, or export only if tests would be unreadable otherwise |
+
+**Good first tests** (from refactor plan): `refresh-timetables.service.test.ts`, `event-equality.test.ts`, `year-week.test.ts`, request mappers.
+
+**Caches in tests:** `createCache()` for isolated instances, or `mock.module` the feature cache helper. Never persist timetable data to disk in tests.

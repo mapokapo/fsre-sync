@@ -1,0 +1,36 @@
+fileignoreconfig:
+- filename: .cursor/rules/background-jobs.mdc
+  checksum: dcb906197c589803adf47ce53d91eadd917dbcbd6e882e19e1ad946b51a46c06
+- filename: .env.example
+  checksum: f347cd1b619516cfcb908eacb7188a809c31015f636f49cf3b89507844f135ae
+- filename: bun.lock
+  checksum: 5387e96cb161f12e461271ec1649fd995682ae6155ef4de2b10aafb09f220ef2
+- filename: docker-compose.yml
+  checksum: 29bc5388a0c6ff34cdf307a0d6d1d8b2d41f2f4798b7d2e498623ed1d1a730c1
+- filename: src/config.ts
+  checksum: eee4bab23f64010c5bc4f0da4640b46f0bf95dfc857506166f4710132e8ed57c
+- filename: src/db/bun-sqlite-dialect.ts
+  checksum: 36960432ef903d8b0fd836ae71d3776188ac7bd1e813ae7dfcdbbf9d2e9dcc96
+- filename: src/features/messaging/dtos/timetable-updated-message.dto.ts
+  checksum: defce56f4e8a124447f66b404af24514ea4a03214e421616f8d4d6aae047e658
+- filename: src/features/messaging/services/email-notification.service.ts
+  checksum: 675f811fc6c903892eb19d5bd08d9df21fbc05e552cf6c13a0146a29857cc81e
+- filename: src/features/messaging/services/fcm-notification.service.ts
+  checksum: 3a2f7e96071c54525fb3387c42a8609d312b8f142c45e38700883a1a5ce18a7e
+- filename: src/features/timetable/helpers/timetable-cache.ts
+  checksum: b652f56e8f85ad05aeb0116232002edb4f450f70427771f0e6b1a555e9f1df88
+- filename: src/features/timetable/requests/get-timetable.request.ts
+  checksum: eeb3fce9c12696d85760d1d9eed884fbd88ffd54cd301fc1844f11ce38d4dcc8
+- filename: src/features/timetable/services/timetable.service.ts
+  checksum: d34d41f11a6db73f5dd3d046ab275c271091f369681d121d6f13462f746d287f
+- filename: src/features/timing/services/refresh-timetables.service.ts
+  checksum: 8ae0d971c1468c2247c4821c0ea3501c7e9bb8ee1f1770cc5d094e7c6760d02d
+- filename: src/lib/cache.ts
+  checksum: 43e1b64c00b1d30c0403bd0fe54b55d4e1c377409523b44d0111659d477d2914
+- filename: src/lib/openapi.ts
+  checksum: 8d4fdbd1b46f70dc1457bd9057dc267157d2cdf753304479ec0f680cd66c95f6
+- filename: src/lib/startup.ts
+  checksum: 3ded2770a4cc88f21783830d4e819af47e18f7e9278a322a2d1c6797c6408fdc
+- filename: test/README.md
+  checksum: 438590f764591208e31d226d40943c76e353aa52e9f887a31b2f1289c2ec00d7
+version: "1.0"

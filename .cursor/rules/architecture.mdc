@@ -1,0 +1,22 @@
+---
+description: FSRE-Sync target architecture — strict VSA, layer graph, known gaps
+alwaysApply: true
+---
+
+# Architecture (target state)
+
+Full rules: `.cursor/skills/vertical-slice-architecture/SKILL.md`. Enforce with `dependency-cruiser` when wired in CI.
+
+**Layer graph:** `app.ts` / `lib/startup.ts` / `lib/cron.ts` (composition root) → `orchestration/` → `features/*` → `integrations/`, `contracts/`, `lib/`, `db/`, `plugins/`.
+
+**Hard rules:**
+- A feature **never** imports another feature. Cross-feature workflows → `orchestration/` (or composition root wiring).
+- External adapters (Edupage HTTP, FCM, SMTP) → `integrations/`, not `features/`.
+- Shared types used by 2+ layers → `contracts/` (types only, no runtime).
+- `features/common/` in this repo = **lean, env-agnostic primitives only** (`ServiceError`, `createCache`). No HTTP, Elysia, SQLite, or domain vocabulary.
+- `src/lib/` = **this app's** infra glue (logger, config, cron, startup, `YearWeek`, `FsreError` response shape).
+- `src/plugins/` = Elysia cross-cutting plugins (e.g. `fsre-error-handler.ts`).
+
+**Litmus test:** own `routes/` (or cron/CLI trigger) → feature. No routes → `integrations/`, `orchestration/`, or `lib/`.
+
+**Repo is not fully VSA-compliant yet** — e.g. `features/timing/` and cross-feature imports exist. New code must move **toward** compliance; do not copy violations into greenfield work.

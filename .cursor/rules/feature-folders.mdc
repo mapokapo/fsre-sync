@@ -1,0 +1,27 @@
+---
+description: Feature slice folder roles — where code lives in fsre-sync
+globs: src/features/**/*
+alwaysApply: false
+---
+
+# Feature folder roles
+
+Fixed roles — do not add `domain/`, `lib/` inside features, or other folder types without agreement.
+
+| Folder | Role |
+|--------|------|
+| `dtos/` | Service-layer shapes. Plain `interface`/`type` only — **no methods, no Zod, no mapping** |
+| `entities/` | DB row shapes; map to/from DTOs at repository boundary |
+| `errors/` | `ServiceError` subclasses; pass `ServiceErrorCode` to `super()`. **No HTTP status** |
+| `repositories/` | All external I/O: SQLite, Edupage, FCM, SMTP |
+| `requests/` | Zod + OpenAPI + `to*Dto()` (HTTP → service DTO) |
+| `responses/` | Zod + OpenAPI + `to*Response()` (DTO → HTTP) |
+| `routes/` | Thin: extract → `to*Dto` → service → `to*Response` |
+| `services/` | Business logic; portable — no Elysia, Kysely, or HTTP |
+| `helpers/` | Extracted code **within** the feature; navigation-first |
+
+**Navigation question:** "If Edupage changes?" → `integrations/edupage/` (target) or `features/edupage/` (legacy). "If timetable event shape changes?" → `timetable/`.
+
+**Cache:** timetable data is **in-memory only** (`createCache` in `common/helpers/`, singletons in `timetable/helpers/`). Never disk/Redis without explicit decision.
+
+**In-memory cache resets on shutdown** — intentional for single-instance deployment.

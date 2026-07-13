@@ -1,0 +1,13 @@
+node_modules
+data
+.env
+.env.*
+!.env.example
+.git
+*.log
+coverage
+dist
+out
+*.md
+Dockerfile*
+compose*.yml

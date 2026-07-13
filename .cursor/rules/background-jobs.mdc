@@ -1,0 +1,29 @@
+---
+description: Cron refresh and background notification error handling
+globs: src/lib/cron.ts,src/features/timing/**,src/lib/startup.ts
+alwaysApply: false
+---
+
+# Background jobs (cron / startup)
+
+**Cron** (`lib/cron.ts`): top-level `.catch` logs `"Cron refresh failed"` — process stays alive.
+
+**Per-key isolation in refresh loop:** one failed timetable key must **not** abort other keys/programs:
+
+```typescript
+try {
+  await refreshTimetableKey(key, subscribers);
+} catch (error) {
+  logger.error(`Failed to refresh timetable for ${key...}`, error);
+}
+```
+
+**`notifySubscribers`:** per-subscriber try/catch:
+- `ServiceError` → `logger.error` with subscription id, studyProgram, channel hint, code → **continue**
+- anything else → **rethrow**
+
+**`sendTimetableUpdate`:** if no FCM path and no email → `logger.warn` (unreachable subscription).
+
+**Cache:** always `setTimetable` after successful fetch, even when some notifications failed.
+
+**Target home for refresh workflow:** `orchestration/` (not a feature importing other features). `features/timing/` is legacy.
