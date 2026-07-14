@@ -8,7 +8,7 @@ import { ServiceError } from "@/features/common/errors/service.error.ts";
 import { createFsreError, type FsreError } from "@/lib/errors.ts";
 
 interface HttpMapping {
-  details?: (error: ServiceError) => string | undefined;
+  details?: (error: ServiceError) => unknown;
   message: ((error: ServiceError) => string) | string;
   status: number;
   title: string;
@@ -91,18 +91,18 @@ export function handleValidationError(
 ): FsreError | undefined {
   if (!(error instanceof ValidationError)) return undefined;
 
-  const firstIssue = error.all[0];
+  const issues = error.all;
   const message =
-    firstIssue?.summary ??
-    (typeof firstIssue?.message === "string"
-      ? firstIssue.message
-      : "Request validation failed");
+    issues
+      .map(issue => issue.summary ?? issue.message)
+      .filter((m): m is string => typeof m === "string" && m.length > 0)
+      .join("; ") || "Request validation failed";
 
   set.status = error.status;
   return createFsreError(
     error.status,
     "Unprocessable Content",
     message,
-    error.message
+    issues
   );
 }

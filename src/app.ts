@@ -53,6 +53,11 @@ export function createApp() {
     .use(messagingRoutes);
 
   return new Elysia()
+    .onError(({ code, set }) => {
+      if (code !== "NOT_FOUND") return;
+      set.status = 404;
+      return createFsreError(404, "Not Found", "Route not found");
+    })
     .use(
       openapi({
         documentation: {
