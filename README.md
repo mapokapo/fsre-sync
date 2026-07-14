@@ -16,9 +16,11 @@ TypeScript/Bun rewrite of the FSRE Timetable Notify backend using **Elysia**,
 ```bash
 cp .env.example .env   # fill in values
 bun install
-bun run db:migrate     # run once per deploy (not on every app start)
 bun run dev
 ```
+
+Migrations run automatically on startup (`dev` / `start`). You can still apply
+them manually with `bun run db:migrate`.
 
 API base URL: `http://localhost:5000/api`
 
@@ -35,14 +37,17 @@ The container runs migrations on startup (`entrypoint.sh`), then starts the
 server. SQLite data is persisted in `./data` on the host. Mount your Firebase
 service account at `./service_account_key.json` (see `docker-compose.yml`).
 
+Production expects an external Docker network named `nginx-proxy` (same as other
+services on the host). Create it once if needed: `docker network create nginx-proxy`.
+
 Health check: `GET /health` (liveness only; does not probe Edupage or FCM).
 
 ## Scripts
 
-| Script               | Description                                   |
-| -------------------- | --------------------------------------------- |
-| `bun run db:migrate` | Apply pending Kysely migrations (deploy step) |
-| `bun run dev`        | Start server with watch mode                  |
+| Script               | Description                                      |
+| -------------------- | ------------------------------------------------ |
+| `bun run db:migrate` | Apply pending Kysely migrations (also on startup) |
+| `bun run dev`        | Start server with watch mode                     |
 | `bun run start`      | Start server                                  |
 | `bun run test`       | Run tests (`test/` mirrors `src/`)            |
 | `bun run typecheck`  | TypeScript check                              |

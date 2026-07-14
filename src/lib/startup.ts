@@ -1,3 +1,4 @@
+import { migrateToLatest } from "@/db/migrate.ts";
 import { initializeFirebase } from "@/features/messaging/services/firebase.service.ts";
 import {
   fetchTimetableDatabase,
@@ -11,6 +12,9 @@ import { getActiveTimetableKeys } from "@/features/timing/services/refresh-timet
 import { logger } from "@/lib/logger.ts";
 
 export async function runStartup(): Promise<void> {
+  logger.info("Applying database migrations...");
+  await migrateToLatest();
+
   logger.info("Fetching timetable database...");
   const database = await fetchTimetableDatabase();
   setTimetableDatabase(database);

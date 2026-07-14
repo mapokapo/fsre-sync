@@ -1,18 +1,12 @@
+import { formatInTimeZone } from "date-fns-tz";
+
 import type { TimetableDifferenceDto } from "@/features/timetable/dtos/timetable-difference.dto.ts";
 import type { TimetableEventDto } from "@/features/timetable/dtos/timetable-event.dto.ts";
 
 const MAX_DETAIL_LINES = 3;
 const SUMMARY_MAX_LENGTH = 180;
-
-const timeFormatter = new Intl.DateTimeFormat("en-US", {
-  day: "2-digit",
-  hour: "2-digit",
-  hourCycle: "h23",
-  minute: "2-digit",
-  month: "short",
-  timeZone: "UTC",
-  weekday: "short",
-});
+/** Compact mobile push line: weekday + HH:mm in UTC (client TZ unknown). */
+const EVENT_TIME_PATTERN = "EEE HH:mm";
 
 export function buildDetailLines(difference: TimetableDifferenceDto): string[] {
   const lines: string[] = [];
@@ -87,15 +81,21 @@ function addDetails(
 
   for (const event of sorted) {
     if (lines.length >= MAX_DETAIL_LINES) break;
-    const room = event.classRoomNames[0];
-    const location = room ? ` @${room}` : "";
-    lines.push(
-      `${prefix} ${event.name} ${timeFormatter.format(new Date(event.startDateTime))}${location}`
-    );
+    lines.push(formatEventDetail(event, prefix));
   }
 }
 
 function formatCount(size: number, label: string): string {
   if (size === 0) return "";
   return `${size.toString()} ${label}${size === 1 ? "" : "es"}`;
+}
+
+function formatEventDetail(event: TimetableEventDto, prefix: string): string {
+  const name = event.name || "Class";
+  const timeLabel = event.startDateTime
+    ? formatInTimeZone(new Date(event.startDateTime), "UTC", EVENT_TIME_PATTERN)
+    : "time TBD";
+  const room = event.classRoomNames[0];
+  const location = room ? ` @${room}` : "";
+  return `${prefix} ${name} ${timeLabel}${location}`;
 }

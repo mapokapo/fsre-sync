@@ -16,7 +16,7 @@ import {
 } from "@/plugins/fsre-error-handler.ts";
 
 export function createApp() {
-  const api = new Elysia({ prefix: "/api" })
+  const api = new Elysia({ precompile: true, prefix: "/api" })
     .use(cors({ origin: true }))
     .onError(({ error, set }) => {
       const handled =

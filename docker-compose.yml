@@ -25,9 +25,11 @@ services:
       - ./data:/app/data
       - ./service_account_key.json:/app/service_account_key.json:ro
     networks:
+      - nginx-proxy
       - fsre_sync_default
 
-# NOTE FOR PRODUCTION DEPLOYMENT: connect with an nginx-proxy network like other services on the server.
 networks:
+  nginx-proxy:
+    external: true
   fsre_sync_default:
     driver: bridge
