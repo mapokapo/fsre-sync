@@ -1,0 +1,34 @@
+---
+description: Verify work programmatically after each change — typecheck, lint, format, test, manual QA
+alwaysApply: true
+---
+
+# Verify work after each step
+
+Do **not** claim a change is done until you have **run** the relevant checks and they pass. Guessing or "should be fine" is not verification.
+
+## After code changes (default)
+
+Run from repo root, scoped to touched areas when practical:
+
+| Check | Command |
+|-------|---------|
+| Types | `bun run typecheck` |
+| Lint | `bun run lint` |
+| Format | `bun run format:check` (fix with `bun run format` if needed) |
+| Tests | `bun test` |
+
+Prefer running these in one shell chain when several apply. Fix failures before proceeding or reporting success.
+
+## Scale checks to the change
+
+- **Small / mechanical** (rename, config tweak, one-liner): at least typecheck + lint on affected paths; tests if behavior could change.
+- **Feature / bugfix / refactor**: full table above, plus any new or updated tests you add.
+- **Complex / user-facing / multi-step flows**: also **manual QA** — exercise the real path (e.g. `curl` the API, run `bun run db:migrate`, start the app and hit the route, smoke script). Do not stop at unit tests alone.
+
+## Rules of engagement
+
+- Verification is **programmatic**: execute commands (or real HTTP/CLI against a running process). Reading code is not a substitute.
+- If a check fails, **fix and re-run** until green (or stop and report the blocker with the failing output).
+- If you cannot run a check (missing env, no server, etc.), say so explicitly — do not imply it passed.
+- Do not skip checks to save turns when the change warrants them.
