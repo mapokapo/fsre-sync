@@ -4,13 +4,11 @@ fileignoreconfig:
 - filename: .env.example
   checksum: f347cd1b619516cfcb908eacb7188a809c31015f636f49cf3b89507844f135ae
 - filename: bun.lock
-  checksum: 5387e96cb161f12e461271ec1649fd995682ae6155ef4de2b10aafb09f220ef2
+  checksum: 843b96bc4d2b89dd6b6acc48049d45b34481ab92a88bbb9afff944f5c711c8c4
 - filename: docker-compose.yml
   checksum: 29bc5388a0c6ff34cdf307a0d6d1d8b2d41f2f4798b7d2e498623ed1d1a730c1
 - filename: src/config.ts
   checksum: eee4bab23f64010c5bc4f0da4640b46f0bf95dfc857506166f4710132e8ed57c
-- filename: src/db/bun-sqlite-dialect.ts
-  checksum: 36960432ef903d8b0fd836ae71d3776188ac7bd1e813ae7dfcdbbf9d2e9dcc96
 - filename: src/features/messaging/dtos/timetable-updated-message.dto.ts
   checksum: defce56f4e8a124447f66b404af24514ea4a03214e421616f8d4d6aae047e658
 - filename: src/features/messaging/services/email-notification.service.ts

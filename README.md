@@ -38,21 +38,22 @@ server. SQLite data is persisted in `./data` on the host. Mount your Firebase
 service account at `./service_account_key.json` (see `docker-compose.yml`).
 
 Production expects an external Docker network named `nginx-proxy` (same as other
-services on the host). Create it once if needed: `docker network create nginx-proxy`.
+services on the host). Create it once if needed:
+`docker network create nginx-proxy`.
 
 Health check: `GET /health` (liveness only; does not probe Edupage or FCM).
 
 ## Scripts
 
-| Script               | Description                                      |
-| -------------------- | ------------------------------------------------ |
+| Script               | Description                                       |
+| -------------------- | ------------------------------------------------- |
 | `bun run db:migrate` | Apply pending Kysely migrations (also on startup) |
-| `bun run dev`        | Start server with watch mode                     |
-| `bun run start`      | Start server                                  |
-| `bun run test`       | Run tests (`test/` mirrors `src/`)            |
-| `bun run typecheck`  | TypeScript check                              |
-| `bun run lint`       | ESLint                                        |
-| `bun run format`     | Prettier                                      |
+| `bun run dev`        | Start server with watch mode                      |
+| `bun run start`      | Start server                                      |
+| `bun run test`       | Run tests (`test/` mirrors `src/`)                |
+| `bun run typecheck`  | TypeScript check                                  |
+| `bun run lint`       | ESLint                                            |
+| `bun run format`     | Prettier                                          |
 
 ## API endpoints
 

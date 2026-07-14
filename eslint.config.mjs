@@ -14,8 +14,6 @@ export default defineConfig(
       "**/coverage/**",
       "eslint.config.mjs",
       ".cursor",
-      // TODO: remove this file once bun-sqlite-dialect is fixed
-      "src/db/bun-sqlite-dialect.ts",
     ],
   },
 
