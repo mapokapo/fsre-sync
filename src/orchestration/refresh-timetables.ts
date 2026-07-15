@@ -1,5 +1,8 @@
-import type { TimetableDifferenceDto } from "@/contracts/timetable.ts";
-import type { TimetableKeyDto } from "@/contracts/timetable.ts";
+import type {
+  TimetableDifferenceDto,
+  TimetableDto,
+  TimetableKeyDto,
+} from "@/contracts/timetable.ts";
 import type { MessagingSubscriptionDto } from "@/features/messaging";
 
 import * as messaging from "@/features/messaging";
@@ -16,7 +19,7 @@ import { ServiceError } from "@/lib/service-error.ts";
 
 export async function fetchAndDiff(key: TimetableKeyDto): Promise<{
   difference: null | TimetableDifferenceDto;
-  newTimetable: Awaited<ReturnType<typeof fetchTimetable>>;
+  newTimetable: TimetableDto;
 }> {
   const newTimetable = await fetchTimetable(key);
   const existing = getTimetable(key);
