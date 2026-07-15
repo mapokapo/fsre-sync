@@ -1,5 +1,5 @@
-import type { TimetableKeyDto } from "@/features/timetable/dtos/timetable-key.dto.ts";
-import type { TimetableDto } from "@/features/timetable/dtos/timetable.dto.ts";
+import type { TimetableKeyDto } from "@/contracts/timetable.ts";
+import type { TimetableDto } from "@/contracts/timetable.ts";
 
 import { createCache } from "@/lib/cache.ts";
 

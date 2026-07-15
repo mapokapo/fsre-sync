@@ -21,6 +21,6 @@ return toSubscriptionResponse(result);
 
 **Elysia wiring:** `app.ts` registers `onError` → `handleServiceError` **before** `.use(routePlugins)` (AOT ordering matters).
 
-**Feature routes** export Elysia plugins from `routes/*.routes.ts`; composition root imports them in `app.ts`.
+**Feature routes** live in `routes/*.routes.ts` and are composed into the feature’s `index.ts` Elysia plugin; composition root `.use()`s the feature plugin.
 
 **OpenAPI:** Zod schemas in requests/responses with `.meta()` for OpenAPI fields.

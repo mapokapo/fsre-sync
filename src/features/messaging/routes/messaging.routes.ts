@@ -1,5 +1,6 @@
 import { Elysia } from "elysia";
 
+import { deviceInfoPlugin } from "@/features/messaging/plugins/device-info.ts";
 import {
   subscribeRequestSchema,
   toSubscribeDto,
@@ -10,7 +11,6 @@ import {
   toSubscriptionResponse,
 } from "@/features/messaging/responses/subscription.response.ts";
 import * as messagingService from "@/features/messaging/services/messaging.service.ts";
-import { deviceInfoPlugin } from "@/plugins/device-info.ts";
 
 export const messagingRoutes = new Elysia()
   .use(deviceInfoPlugin)

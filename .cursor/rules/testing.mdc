@@ -17,6 +17,6 @@ Mirror `src/` under `test/` (see `test/README.md`). Run: `bun test`.
 | Repositories | `createDb(':memory:')` + migrations; mock `getDb` if needed |
 | Private helpers | Test via public caller, or export only if tests would be unreadable otherwise |
 
-**Good first tests** (from refactor plan): `refresh-timetables.service.test.ts`, `event-equality.test.ts`, `year-week.test.ts`, request mappers.
+**Good first tests:** `test/orchestration/refresh-timetables.test.ts`, `event-equality.test.ts`, `year-week.test.ts`, request mappers.
 
 **Caches in tests:** `createCache()` for isolated instances, or `mock.module` the feature cache helper. Never persist timetable data to disk in tests.

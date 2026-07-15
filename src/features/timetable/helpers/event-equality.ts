@@ -1,4 +1,4 @@
-import type { TimetableEventDto } from "@/features/timetable/dtos/timetable-event.dto.ts";
+import type { TimetableEventDto } from "@/contracts/timetable-event.ts";
 
 const EVENT_EQUALITY_KEYS = [
   "id",

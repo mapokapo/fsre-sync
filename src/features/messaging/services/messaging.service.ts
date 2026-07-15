@@ -7,7 +7,7 @@ import { MessagingSubscriptionAlreadyRegistered } from "@/features/messaging/err
 import * as messagingRepository from "@/features/messaging/repositories/messaging.repository.ts";
 import { sendEmailNotification } from "@/features/messaging/services/email-notification.service.ts";
 import { sendFcmNotification } from "@/features/messaging/services/fcm-notification.service.ts";
-import { isFirebaseInitialized } from "@/features/messaging/services/firebase.service.ts";
+import { isFirebaseInitialized } from "@/integrations/firebase/firebase.service.ts";
 import { logger } from "@/lib/logger.ts";
 
 export async function findByStudyProgramId(

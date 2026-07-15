@@ -1,5 +1,3 @@
-import { getMessaging } from "firebase-admin/messaging";
-
 import type { TimetableUpdatedMessageDto } from "@/features/messaging/dtos/timetable-updated-message.dto.ts";
 
 import { FcmSendMessageFailed } from "@/features/messaging/errors/messaging.errors.ts";
@@ -9,6 +7,7 @@ import {
   buildSummaryTitle,
   trimLength,
 } from "@/features/messaging/services/summary-formatter.service.ts";
+import { sendFcmMessage } from "@/integrations/fcm/send.ts";
 
 // TODO: Add iOS (APNs) notification configuration alongside the Android block.
 
@@ -21,7 +20,7 @@ export async function sendFcmNotification(
     const title = buildSummaryTitle(difference);
     const body = trimLength(buildSummaryBody(difference));
 
-    await getMessaging().send({
+    await sendFcmMessage({
       android: {
         notification: { body, priority: "high", title },
         priority: "high",

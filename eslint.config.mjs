@@ -13,6 +13,7 @@ export default defineConfig(
       "**/build/**",
       "**/coverage/**",
       "eslint.config.mjs",
+      "dependency-cruiser.config.cjs",
       ".cursor",
     ],
   },

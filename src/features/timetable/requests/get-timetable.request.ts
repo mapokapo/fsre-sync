@@ -1,13 +1,13 @@
 import { z } from "zod";
 
-import type { TimetableKeyDto } from "@/features/timetable/dtos/timetable-key.dto.ts";
+import type { TimetableKeyDto } from "@/contracts/timetable.ts";
 
 import { InvalidIsoWeekError } from "@/features/timetable/errors/timetable.errors.ts";
 import {
   OPENAPI_ISO_WEEK_EXAMPLE,
   OPENAPI_STUDY_PROGRAM_ID_EXAMPLE,
 } from "@/lib/openapi.ts";
-import { YearWeek } from "@/lib/year-week.ts";
+import { YearWeek } from "@/primitives/year-week.ts";
 
 export const getTimetableQuerySchema = z.object({
   isoWeek: z

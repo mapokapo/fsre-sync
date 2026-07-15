@@ -1,5 +1,5 @@
-import { refreshTimetables } from "@/features/timing/services/refresh-timetables.service.ts";
 import { logger } from "@/lib/logger.ts";
+import { refreshTimetables } from "@/orchestration/refresh-timetables.ts";
 
 export function scheduleTimetableRefresh(): void {
   Bun.cron("*/15 * * * *", () => {

@@ -2,9 +2,9 @@
 
 Tests mirror the `src/` layout (Java-style), for example:
 
-- `src/features/edupage/helpers/parsing.ts` →
-  `test/features/edupage/helpers/parsing.test.ts`
-- `src/lib/year-week.ts` → `test/lib/year-week.test.ts`
+- `src/integrations/edupage/helpers/parsing.ts` →
+  `test/integrations/edupage/helpers/parsing.test.ts`
+- `src/primitives/year-week.ts` → `test/primitives/year-week.test.ts`
 
 Run the suite with:
 
@@ -12,7 +12,8 @@ Run the suite with:
 bun test
 ```
 
-No test files exist yet. This folder is reserved for a future testing pass.
+Placeholder coverage exists (`test/test.test.ts`); real suite files should
+mirror `src/` paths as above.
 
 ## Conventions
 
@@ -72,7 +73,7 @@ const slot = createCache<TimetableDatabaseDto>(() => "__singleton__");
 Feature modules export a production singleton (one-liner over `createCache`);
 see [`timetable-cache.ts`](../src/features/timetable/helpers/timetable-cache.ts)
 and
-[`timetable-database-cache.ts`](../src/features/timetable-database/helpers/timetable-database-cache.ts).
+[`timetable-database-cache.ts`](../src/features/timetable/helpers/timetable-database-cache.ts).
 For isolated instances in tests, call `createCache` with the same `keyMapper`,
 or `mock.module` the feature helper.
 

@@ -30,6 +30,13 @@ const BUN_BUILTINS = [
   "bun:wrap",
 ];
 
+/** Composition-root files allowed to import features (and wire integrations). */
+const COMPOSITION_ROOT = [
+  "^src/app\\.ts$",
+  "^src/index\\.ts$",
+  "^src/lib/(startup|cron)\\.ts$",
+];
+
 module.exports = {
   forbidden: [
     // Rule 1: a feature never imports another feature.
@@ -56,16 +63,32 @@ module.exports = {
       },
     },
 
-    // Rule 4: contracts/ is a pure leaf — it imports nothing from the codebase.
+    // Rule 4: contracts/ is types-only. It may reference contracts/ and
+    // dependency-free primitives/ only.
     {
-      comment: "contracts/ must not import anything else in src/ (VSA rule 4).",
+      comment:
+        "contracts/ may only import contracts/ or primitives/ (VSA rule 4).",
       from: { path: "^src/contracts/" },
       name: "contracts-is-leaf",
       severity: "error",
-      to: { path: "^src/(?!contracts/)" },
+      to: {
+        path: "^src/",
+        pathNot: ["^src/contracts/", "^src/primitives/"],
+      },
+    },
+    {
+      comment:
+        "primitives/ must not import other application layers (VSA rule 4).",
+      from: { path: "^src/primitives/" },
+      name: "primitives-is-leaf",
+      severity: "error",
+      to: {
+        path: "^src/",
+        pathNot: "^src/primitives/",
+      },
     },
 
-    // Rule 5: integrations/ never imports features/.
+    // Rule 5: integrations/ never imports features/ or orchestration/.
     {
       comment: "integrations/ must not import features/ (VSA rule 5).",
       from: { path: "^src/integrations/" },
@@ -73,8 +96,16 @@ module.exports = {
       severity: "error",
       to: { path: "^src/features/" },
     },
+    {
+      comment: "integrations/ must not import orchestration/ (VSA rule 5).",
+      from: { path: "^src/integrations/" },
+      name: "integrations-cannot-import-orchestration",
+      severity: "error",
+      to: { path: "^src/orchestration/" },
+    },
 
-    // Rule 6: orchestration/ sits above features/, not below it.
+    // Rule 6: orchestration sits above features; it must not bypass them
+    // by calling integrations/ directly. Features must not import orchestration.
     {
       comment: "features/ must not import orchestration/ (VSA rule 6).",
       from: { path: "^src/features/" },
@@ -82,12 +113,38 @@ module.exports = {
       severity: "error",
       to: { path: "^src/orchestration/" },
     },
+    {
+      comment:
+        "orchestration/ must use feature public APIs, not integrations/ (VSA rule 6).",
+      from: { path: "^src/orchestration/" },
+      name: "orchestration-cannot-import-integrations",
+      severity: "error",
+      to: { path: "^src/integrations/" },
+    },
 
-    // Rule 7: lib/, db/, plugins/ never import upward.
+    // Only composition root + orchestration may import features. Prevents
+    // "multi-feature" coupling from sneaking into lib/, db/, plugins/, etc.
+    {
+      comment:
+        "Only composition root and orchestration/ may import features/ (VSA rule 6).",
+      from: {
+        path: "^src/",
+        pathNot: ["^src/features/", "^src/orchestration/", ...COMPOSITION_ROOT],
+      },
+      name: "only-composition-and-orchestration-import-features",
+      severity: "error",
+      to: { path: "^src/features/" },
+    },
+
+    // Rule 7: lib/, db/, plugins/ never import upward — except composition-root
+    // entrypoints that intentionally live under lib/ (startup, cron).
     {
       comment:
         "lib/, db/, plugins/ must not import features/, orchestration/, or integrations/ (VSA rule 7).",
-      from: { path: "^src/(lib|db|plugins)/" },
+      from: {
+        path: "^src/(lib|db|plugins)/",
+        pathNot: "^src/lib/(startup|cron)\\.ts$",
+      },
       name: "infra-is-leaf",
       severity: "error",
       to: { path: "^src/(features|orchestration|integrations)/" },
@@ -96,8 +153,8 @@ module.exports = {
 
   options: {
     doNotFollow: { path: "node_modules" },
+    builtInModules: { add: BUN_BUILTINS },
     tsConfig: { fileName: "tsconfig.json" },
     tsPreCompilationDeps: true,
-    builtInModules: { add: BUN_BUILTINS },
   },
 };

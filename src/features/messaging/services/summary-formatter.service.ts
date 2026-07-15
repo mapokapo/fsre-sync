@@ -1,7 +1,7 @@
 import { formatInTimeZone } from "date-fns-tz";
 
-import type { TimetableDifferenceDto } from "@/features/timetable/dtos/timetable-difference.dto.ts";
-import type { TimetableEventDto } from "@/features/timetable/dtos/timetable-event.dto.ts";
+import type { TimetableEventDto } from "@/contracts/timetable-event.ts";
+import type { TimetableDifferenceDto } from "@/contracts/timetable.ts";
 
 const MAX_DETAIL_LINES = 3;
 const SUMMARY_MAX_LENGTH = 180;

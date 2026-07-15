@@ -5,7 +5,7 @@ import path from "node:path";
 
 import type { Database as DbSchema } from "@/db/schema.ts";
 
-import { config } from "@/config.ts";
+import { config } from "@/lib/config";
 
 export function createDb(filePath: string): Kysely<DbSchema> {
   if (filePath !== ":memory:") {

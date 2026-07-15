@@ -1,14 +1,12 @@
 import { migrateToLatest } from "@/db/migrate.ts";
-import { initializeFirebase } from "@/features/messaging/services/firebase.service.ts";
-import {
-  fetchTimetableDatabase,
-  setTimetableDatabase,
-} from "@/features/timetable-database/services/timetable-database.service.ts";
 import {
   fetchTimetable,
+  fetchTimetableDatabase,
+  getActiveTimetableKeys,
   setTimetable,
-} from "@/features/timetable/services/timetable.service.ts";
-import { getActiveTimetableKeys } from "@/features/timing/services/refresh-timetables.service.ts";
+  setTimetableDatabase,
+} from "@/features/timetable";
+import { initializeFirebase } from "@/integrations/firebase/firebase.service.ts";
 import { logger } from "@/lib/logger.ts";
 
 export async function runStartup(): Promise<void> {

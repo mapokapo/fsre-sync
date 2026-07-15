@@ -1,5 +1,7 @@
-import type { TimetableDifferenceDto } from "@/features/timetable/dtos/timetable-difference.dto.ts";
-import type { TimetableKeyDto } from "@/features/timetable/dtos/timetable-key.dto.ts";
+import type {
+  TimetableDifferenceDto,
+  TimetableKeyDto,
+} from "@/contracts/timetable.ts";
 
 export interface TimetableUpdatedMessageDto {
   difference: TimetableDifferenceDto;

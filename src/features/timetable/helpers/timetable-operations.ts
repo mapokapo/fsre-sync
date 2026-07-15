@@ -1,5 +1,5 @@
-import type { TimetableEventDto } from "@/features/timetable/dtos/timetable-event.dto.ts";
-import type { TimetableDto } from "@/features/timetable/dtos/timetable.dto.ts";
+import type { TimetableEventDto } from "@/contracts/timetable-event.ts";
+import type { TimetableDto } from "@/contracts/timetable.ts";
 
 const WEEK_DAYS = [
   "monday",

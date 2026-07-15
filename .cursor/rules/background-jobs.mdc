@@ -1,6 +1,6 @@
 ---
 description: Cron refresh and background notification error handling
-globs: src/lib/cron.ts,src/features/timing/**,src/lib/startup.ts
+globs: src/lib/cron.ts,src/orchestration/**,src/lib/startup.ts
 alwaysApply: false
 ---
 
@@ -26,4 +26,4 @@ try {
 
 **Cache:** always `setTimetable` after successful fetch, even when some notifications failed.
 
-**Target home for refresh workflow:** `orchestration/` (not a feature importing other features). `features/timing/` is legacy.
+**Refresh workflow** lives in `orchestration/refresh-timetables.ts` and imports features only via their public `index.ts`.

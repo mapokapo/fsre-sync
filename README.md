@@ -6,7 +6,7 @@ TypeScript/Bun rewrite of the FSRE Timetable Notify backend using **Elysia**,
 ## Stack
 
 - **Runtime:** Bun
-- **HTTP:** Elysia + OpenAPI (`/api/docs`)
+- **HTTP:** Elysia + OpenAPI (`/docs`)
 - **Database:** Kysely + SQLite (`SQLITE_PATH`)
 - **Notifications:** Firebase Admin (FCM) + Nodemailer (Gmail SMTP)
 - **Upstream:** Edupage reverse-engineered RPC
@@ -47,6 +47,7 @@ Health check: `GET /health` (liveness only; does not probe Edupage or FCM).
 
 | Script               | Description                                       |
 | -------------------- | ------------------------------------------------- |
+| `bun run arch:check` | dependency-cruiser VSA layer rules                |
 | `bun run db:migrate` | Apply pending Kysely migrations (also on startup) |
 | `bun run dev`        | Start server with watch mode                      |
 | `bun run start`      | Start server                                      |
@@ -64,7 +65,7 @@ Health check: `GET /health` (liveness only; does not probe Edupage or FCM).
 | `POST` | `/api/messaging/subscribe`              | Subscribe to change notifications             |
 | `POST` | `/api/messaging/unsubscribe`            | Unsubscribe                                   |
 
-OpenAPI UI: `/api/docs`
+OpenAPI UI: `/docs`
 
 ## Environment variables
 

@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 
+import type { TimetableEventDto } from "@/contracts/timetable-event.ts";
 import type { TimetableUpdatedMessageDto } from "@/features/messaging/dtos/timetable-updated-message.dto.ts";
-import type { TimetableEventDto } from "@/features/timetable/dtos/timetable-event.dto.ts";
 
 import { buildSummary } from "@/features/messaging/services/summary-formatter.service.ts";
 

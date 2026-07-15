@@ -3,11 +3,10 @@ import { openapi } from "@elysiajs/openapi";
 import { Elysia } from "elysia";
 import { z } from "zod";
 
-import { healthRoutes } from "@/features/health/routes/health.routes.ts";
-import { messagingRoutes } from "@/features/messaging/routes/messaging.routes.ts";
-import { timetableDatabaseRoutes } from "@/features/timetable-database/routes/timetable-database.routes.ts";
-import { timetableRoutes } from "@/features/timetable/routes/timetable.routes.ts";
-import { createFsreError } from "@/lib/errors";
+import { healthFeature } from "@/features/health";
+import { messagingFeature } from "@/features/messaging";
+import { timetableFeature } from "@/features/timetable";
+import { createFsreError } from "@/lib/errors.ts";
 import { logger } from "@/lib/logger.ts";
 import {
   handleParseError,
@@ -48,9 +47,8 @@ export function createApp() {
         errorMessage
       );
     })
-    .use(timetableDatabaseRoutes)
-    .use(timetableRoutes)
-    .use(messagingRoutes);
+    .use(timetableFeature)
+    .use(messagingFeature);
 
   return new Elysia()
     .onError(({ code, set }) => {
@@ -73,6 +71,6 @@ export function createApp() {
         path: "/docs",
       })
     )
-    .use(healthRoutes)
+    .use(healthFeature)
     .use(api);
 }

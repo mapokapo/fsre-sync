@@ -1,21 +1,28 @@
-import type { TimetableDatabaseDto } from "@/features/timetable-database/dtos/timetable-database.dto.ts";
-import type { TimetableKeyDto } from "@/features/timetable/dtos/timetable-key.dto.ts";
-import type { TimetableDto } from "@/features/timetable/dtos/timetable.dto.ts";
+import type { TimetableDatabaseDto } from "@/contracts/timetable-database.ts";
+import type { TimetableKeyDto } from "@/contracts/timetable.ts";
+import type { TimetableDto } from "@/contracts/timetable.ts";
 
-import { parseEdupageTimetable } from "@/features/edupage/helpers/timetable.parser.ts";
-import { fetchEdupageTimetable } from "@/features/edupage/repositories/timetable.repository.ts";
+import {
+  TimetableFetchFailed,
+  TimetableParseFailed,
+} from "@/features/timetable/errors/timetable.errors.ts";
 import {
   lookupName,
   lookupStudyProgramName,
-} from "@/features/timetable-database/helpers/lookups.ts";
-import { getTimetableDatabase } from "@/features/timetable-database/services/timetable-database.service.ts";
-import { TimetableFetchFailed } from "@/features/timetable/errors/timetable.errors.ts";
+} from "@/features/timetable/helpers/lookups.ts";
 import { timetableCache } from "@/features/timetable/helpers/timetable-cache.ts";
 import {
   deduplicateTimetable,
   getWeekDays,
   mergeTimetables,
 } from "@/features/timetable/helpers/timetable-operations.ts";
+import { getTimetableDatabase } from "@/features/timetable/services/timetable-database.service.ts";
+import {
+  EdupageFetchError,
+  EdupageParseError,
+} from "@/integrations/edupage/errors.ts";
+import { parseEdupageTimetable } from "@/integrations/edupage/helpers/timetable.parser.ts";
+import { fetchEdupageTimetable } from "@/integrations/edupage/repositories/timetable.repository.ts";
 
 export async function fetchTimetable(
   key: TimetableKeyDto
@@ -90,7 +97,17 @@ async function fetchTimetableForProgram(
   key: TimetableKeyDto,
   database: TimetableDatabaseDto
 ): Promise<TimetableDto> {
-  const body = await fetchEdupageTimetable(studyProgramId, key.yearWeek);
-  const timetable = parseEdupageTimetable(body, database);
-  return enrichTimetable(timetable, database);
+  try {
+    const body = await fetchEdupageTimetable(studyProgramId, key.yearWeek);
+    const timetable = parseEdupageTimetable(body, database);
+    return enrichTimetable(timetable, database);
+  } catch (error) {
+    if (error instanceof EdupageParseError) {
+      throw new TimetableParseFailed(error);
+    }
+    if (error instanceof EdupageFetchError) {
+      throw new TimetableFetchFailed(error);
+    }
+    throw error;
+  }
 }

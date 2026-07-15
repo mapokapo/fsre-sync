@@ -7,13 +7,21 @@ alwaysApply: false
 # Imports
 
 - Use `@/` path alias for `src/` paths.
-- **Always include `.ts` extension** on relative and alias imports:
+- **Include the `.ts` extension** on file imports (relative and alias):
 
 ```typescript
 import { logger } from "@/lib/logger.ts";
-import type { TimetableDto } from "@/features/timetable/dtos/timetable.dto.ts";
+import type { TimetableDto } from "@/contracts/timetable.ts";
 ```
 
-- Prefer `import * as messagingRepository` / `import * as messagingService` for repos and services consumed from routes or orchestration.
-- **No barrel `index.ts`** re-exports in features (target VSA: single `index.ts` per feature as public API only — not yet adopted everywhere).
-- Do not import past a feature's public boundary into another feature (target VSA).
+- **Feature public API:** outside a feature, import only via its barrel —
+  `@/features/{name}` (resolves to `index.ts`). Do not deep-import into that
+  feature.
+- Prefer `import * as messagingRepository` / `import * as messaging` for repos
+  and feature public APIs.
+- Shared types used by 2+ features/integrations → `contracts/` (not feature
+  DTOs).
+- Shared, dependency-free value objects and deterministic utilities →
+  `primitives/`. Contracts may only reference them with `import type`.
+- Cross-feature workflows import feature barrels from `orchestration/` (or
+  composition root) — never feature → feature.

@@ -1,5 +1,5 @@
-import { ServiceErrorCode } from "@/features/common/errors/service-error.codes.ts";
-import { ServiceError } from "@/features/common/errors/service.error.ts";
+import { ServiceErrorCode } from "@/lib/service-error.codes.ts";
+import { ServiceError } from "@/lib/service-error.ts";
 
 export class InvalidIsoWeekError extends ServiceError {
   constructor(isoWeek: string) {

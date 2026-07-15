@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import type { TimetableDto } from "@/features/timetable/dtos/timetable.dto.ts";
+import type { TimetableDto } from "@/contracts/timetable.ts";
 
 import {
   timetableEventDepartmentSchema,

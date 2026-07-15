@@ -1,14 +1,14 @@
 ---
 description: ServiceError hierarchy and HTTP mapping boundaries
-globs: src/features/**/errors/**,src/features/common/errors/**,src/plugins/**,src/lib/errors.ts
+globs: src/features/**/errors/**,src/plugins/**,src/lib/errors.ts,src/lib/service-error*.ts
 alwaysApply: false
 ---
 
 # Errors
 
-**Registry:** all codes in `features/common/errors/service-error.codes.ts`. New throwable error → add code + thin `ServiceError` subclass in feature `errors/`.
+**Registry:** all codes in `lib/service-error.codes.ts`. New throwable error → add code + thin `ServiceError` subclass in feature `errors/`.
 
-**Service errors:** `ServiceError` + stable `code` string. **Never** attach HTTP status to service-layer errors.
+**Service errors:** `ServiceError` (`lib/service-error.ts`) + stable `code` string. **Never** attach HTTP status to service-layer errors.
 
 **HTTP mapping:** only in `plugins/fsre-error-handler.ts`. Add a map entry **only** if the code can reach the API. Codes without mapping (`fcm_send_message_failed`, `email_send_message_failed`, etc.) are internal/background-only.
 
@@ -17,9 +17,9 @@ alwaysApply: false
 **FsreError** (`lib/errors.ts`) = legacy JSON response shape until RFC 9457 / Elysia 2.0 `problem()`.
 
 ```typescript
-// ✅ repo boundary
+// ✅ repo / integration boundary mapped in the feature
 catch (error) {
-  throw new TimetableFetchFailed("...", error);
+  throw new TimetableFetchFailed(error);
 }
 
 // ❌ in service

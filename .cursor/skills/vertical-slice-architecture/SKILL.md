@@ -6,10 +6,10 @@ description:
   adding a route/plugin, refactoring folder structure, asking where a file
   should live, or asking whether one feature is "allowed" to import from
   another. Defines exactly which folders may import from which others (features,
-  contracts, integrations, orchestration, lib, db, plugins) and how to enforce
-  those boundaries with dependency-cruiser instead of relying on memory or code
-  review. Trigger this proactively any time a new top-level folder is proposed
-  or an import crosses a feature boundary.
+  contracts, primitives, integrations, orchestration, lib, db, plugins) and how
+  to enforce those boundaries with dependency-cruiser instead of relying on
+  memory or code review. Trigger this proactively any time a new top-level
+  folder is proposed or an import crosses a feature boundary.
 ---
 
 # Vertical Slice Architecture — strict layer rules
@@ -25,13 +25,15 @@ composition root (app.ts, lib/startup.ts, lib/cron.ts)
    │  may import anything
    ▼
 orchestration/            ← only layer allowed to import 2+ features
-   │  imports: features/*, contracts/
+   │  imports: features/*, contracts/, primitives/
    ▼
 features/*                ← independent, one folder per feature
-   │  imports: contracts/, integrations/ (own), lib/, db/, plugins/
+   │  imports: contracts/, primitives/, integrations/ (own), lib/, db/, plugins/
    ▼
 integrations/*, contracts/, lib/, db/, plugins/     ← leaves
-      import nothing above this line
+   │  contracts/ may type-import primitives/
+   ▼
+primitives/                                      ← dependency-free leaf
 ```
 
 Imports only ever point downward. Nothing below the line knows anything above it
@@ -59,39 +61,46 @@ layer, not in the feature you're importing it into.
 
 4. **`contracts/` is types only.** Interfaces and DTOs shared by 2+
    features/integrations. No runtime logic, no framework imports (no Elysia, no
-   DB client), no side effects. It's the one folder that is safe for literally
-   everything else to import, because it can never import anything back.
+   DB client), no side effects. It may type-import dependency-free value objects
+   from `primitives/`; it must not import features, orchestration, integrations,
+   lib, db, or plugins.
 
 5. **`integrations/` holds adapters to things outside this codebase** (a
    third-party API, another internal service reached over HTTP, etc.). No
    `routes/` — it's not independently invocable, it's a client library. An
-   integration never imports a feature. A feature may import an integration it
-   owns; other features get at that integration's data only through the owning
-   feature's public API, or through `orchestration/`.
+   integration never imports a feature or orchestration. A feature may import an
+   integration it owns; other features get at that integration's data only
+   through the owning feature's public API, or through `orchestration/`
+   composing those feature APIs (orchestration itself must not call
+   integrations/).
 
-6. **`orchestration/` is the only place allowed to import more than one
-   feature.** A file here composes 2+ features' public entry points into a
-   workflow (e.g. "on a new timetable event, resolve related messaging
-   recipients and send a notification"). It contains sequencing and translation
-   between features' contracts — no business logic that belongs to a single
-   feature, and no `routes/` of its own; either a feature's route calls into it,
-   or the composition root wires it directly into a cron job / event handler.
+6. **`orchestration/` is the only workflow layer allowed to import more than one
+   feature** (composition root may also `.use()` / wire multiple features). A
+   file here composes 2+ features' public entry points into a workflow (e.g. "on
+   a new timetable event, resolve related messaging recipients and send a
+   notification"). It contains sequencing and translation between features'
+   contracts — no business logic that belongs to a single feature, and no
+   `routes/` of its own; either a feature's route calls into it, or the
+   composition root wires it directly into a cron job / event handler.
 
-7. **`lib/`, `db/`, `plugins/` are generic infrastructure** — logger, config,
-   cache, DB client, migrations, cross-cutting Elysia plugins (auth guard, rate
-   limiter). Zero business/domain vocabulary lives here. They're importable from
-   any layer, but they never import upward from `features/`, `orchestration/`,
-   or `integrations/`. A plugin used by exactly one feature lives inside that
-   feature's own `plugins/` subfolder, not in top-level `plugins/` — promote it
-   only when a second feature needs it (see rule 3).
+7. **`primitives/` is the dependency-free foundation** — pure reusable value
+   objects and deterministic utilities such as `YearWeek`. It may import
+   language, standard-library, or third-party dependencies, but never another
+   `src/` layer. `lib/`, `db/`, `plugins/` are generic infrastructure — logger,
+   config, cache, DB client, migrations, cross-cutting Elysia plugins (auth
+   guard, rate limiter). Zero business/domain vocabulary lives there. They're
+   importable from any layer, but they never import upward from `features/`,
+   `orchestration/`, or `integrations/`. A plugin used by exactly one feature
+   lives inside that feature's own `plugins/` subfolder, not in top-level
+   `plugins/` — promote it only when a second feature needs it (see rule 3).
 
 8. **The litmus test for "is this a feature":** does it have its own `routes/`
    (or another independent trigger — a queue consumer, a cron entry, a CLI
    command)? If not, it's not independently invocable, so it isn't a feature.
-   It's `integrations/`, `orchestration/`, or `lib/` depending on what it does.
-   A folder with no `routes/` sitting inside `features/` is the single most
-   common VSA violation — it accumulates imports from real features because
-   nothing stops it, since it was never actually a peer to them.
+   It's `integrations/`, `orchestration/`, `primitives/`, or `lib/` depending on
+   what it does. A folder with no `routes/` sitting inside `features/` is the
+   single most common VSA violation — it accumulates imports from real features
+   because nothing stops it, since it was never actually a peer to them.
 
 ## Folder layout
 
@@ -113,7 +122,9 @@ src/
 ├── orchestration/
 │   └── {workflow-name}.ts    # composes 2+ features, imported by composition root
 ├── contracts/
-│   └── {shared-type}.ts      # types only — rule 4
+│   └── {shared-type}.ts      # types only; may type-import primitives/ — rule 4
+├── primitives/
+│   └── {value-object}.ts     # dependency-free reusable value object / utility
 ├── integrations/
 │   └── {external-system}/    # adapters, no routes/ — rule 5
 ├── lib/                      # generic infra, framework glue
@@ -151,31 +162,33 @@ const app = new Elysia().use(messagingFeature).use(timetableFeature);
 registerReminderWorkflow(app); // wires cross-feature workflow via orchestration/
 ```
 
-For a feature that needs data owned by another feature's persistence layer (the
-classic `timetable` ↔ `timetable-database` situation), don't import across the
-boundary — invert it with a structurally-typed interface defined where it's
-consumed, and satisfy it at the composition root:
+For a feature that needs data owned by another feature's persistence layer,
+don't import across the boundary — invert it with a structurally-typed interface
+defined where it's consumed, and satisfy it at the composition root (or keep
+related routes/services in the **same** feature when they share one cache and
+domain, which is how this project's timetable + timetable-database HTTP routes
+live under `features/timetable/`):
 
 ```ts
-// features/timetable/services/timetable.service.ts
+// features/reminders/services/reminder.service.ts
 interface EventRepository {
   getEventsInRange(start: Date, end: Date): Promise<TimetableEvent[]>;
 }
-export function createTimetableService(repo: EventRepository) {
+export function createReminderService(repo: EventRepository) {
   /* ... */
 }
 ```
 
 ```ts
-// app.ts
-import { createEventRepository } from "./features/timetable-database/repositories/event.repository";
-import { createTimetableService } from "./features/timetable/services/timetable.service";
+// app.ts — composition root wires the dependency
+import { createEventRepository } from "./features/timetable";
+import { createReminderService } from "./features/reminders";
 
-const timetableService = createTimetableService(createEventRepository(db));
+const reminderService = createReminderService(createEventRepository(db));
 ```
 
-`timetable` never imports `timetable-database`, or vice versa. Only the
-composition root knows both exist.
+`reminders` never imports `timetable` internals. Only the composition root (or
+`orchestration/`) knows both exist.
 
 ## Enforcement
 
@@ -189,11 +202,13 @@ your `src/` layout differs). It checks:
 
 - no feature imports another feature
 - nothing outside a feature imports past its `index.ts`
-- `contracts/` never imports anything (true leaf)
-- `integrations/` never imports `features/`
-- only `orchestration/` may import more than one feature
+- `contracts/` only imports other contracts or `primitives/`
+- `primitives/` never imports another `src/` layer
+- `integrations/` never imports `features/` or `orchestration/`
+- only composition root + `orchestration/` may import features
+- `orchestration/` must not import `integrations/` (use feature public APIs)
 - `lib/`, `db/`, `plugins/` never import `features/`, `orchestration/`, or
-  `integrations/`
+  `integrations/` (except `lib/startup.ts` / `lib/cron.ts`)
 
 ### Bun and TypeScript
 
@@ -221,8 +236,7 @@ manager):
 ```json
 {
   "scripts": {
-    "arch:check": "depcruise --config dependency-cruiser.config.cjs --output-type err src",
-    "arch:graph": "depcruise --config dependency-cruiser.config.cjs --output-type dot src | dot -T svg > architecture.svg"
+    "arch:check": "depcruise --config dependency-cruiser.config.cjs --output-type err src"
   }
 }
 ```

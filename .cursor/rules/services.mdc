@@ -20,4 +20,4 @@ Services follow an **OOP-inspired module pattern**: exported public functions = 
 
 **Services never know HTTP exists** — no status codes, no `FsreError`, no Elysia types.
 
-**Repositories own infra failures** — catch driver/fetch errors at repo boundary, rethrow as feature `ServiceError` subclass.
+**Integrations / repositories own infra failures** — catch driver/fetch errors at the adapter boundary (`integrations/` or feature `repositories/`). Features map those into `ServiceError` subclasses when calling integrations.

@@ -1,5 +1,5 @@
 import { createApp } from "@/app.ts";
-import { config } from "@/config.ts";
+import { config } from "@/lib/config";
 import { scheduleTimetableRefresh } from "@/lib/cron.ts";
 import { logger } from "@/lib/logger.ts";
 import { runStartup } from "@/lib/startup.ts";

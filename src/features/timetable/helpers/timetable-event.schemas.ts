@@ -1,10 +1,29 @@
 import { z } from "zod";
 
-import {
-  TIMETABLE_EVENT_DEPARTMENTS,
-  TIMETABLE_EVENT_TYPES,
-  TIMETABLE_EVENT_YEARS,
-} from "@/features/timetable/helpers/timetable-event.types.ts";
+import type { TimetableEventDepartment } from "@/contracts/timetable-event.ts";
+import type { TimetableEventType } from "@/contracts/timetable-event.ts";
+import type { TimetableEventYear } from "@/contracts/timetable-event.ts";
+
+export const TIMETABLE_EVENT_DEPARTMENTS = [
+  "COMPUTER_SCIENCE",
+  "ELECTRICAL_ENGINEERING",
+  "MECHANICAL_ENGINEERING",
+] as const satisfies readonly TimetableEventDepartment[];
+
+export const TIMETABLE_EVENT_TYPES = [
+  "LECTURE",
+  "EXERCISE",
+  "LECTURE_AND_EXERCISE",
+  "LABS",
+] as const satisfies readonly TimetableEventType[];
+
+export const TIMETABLE_EVENT_YEARS = [
+  "FIRST",
+  "SECOND",
+  "THIRD",
+  "FOURTH",
+  "FIFTH",
+] as const satisfies readonly TimetableEventYear[];
 
 export const timetableEventDepartmentSchema = z
   .enum(TIMETABLE_EVENT_DEPARTMENTS)

@@ -1,11 +1,11 @@
 import { ParseError, ValidationError } from "elysia";
 
+import { createFsreError, type FsreError } from "@/lib/errors.ts";
 import {
   ServiceErrorCode,
   type ServiceErrorCode as ServiceErrorCodeType,
-} from "@/features/common/errors/service-error.codes.ts";
-import { ServiceError } from "@/features/common/errors/service.error.ts";
-import { createFsreError, type FsreError } from "@/lib/errors.ts";
+} from "@/lib/service-error.codes.ts";
+import { ServiceError } from "@/lib/service-error.ts";
 
 interface HttpMapping {
   details?: (error: ServiceError) => unknown;

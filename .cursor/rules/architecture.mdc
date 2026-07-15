@@ -1,22 +1,34 @@
 ---
-description: FSRE-Sync target architecture — strict VSA, layer graph, known gaps
+description: FSRE-Sync target architecture — strict VSA, layer graph
 alwaysApply: true
 ---
 
 # Architecture (target state)
 
-Full rules: `.cursor/skills/vertical-slice-architecture/SKILL.md`. Enforce with `dependency-cruiser` when wired in CI.
+Full rules: `.cursor/skills/vertical-slice-architecture/SKILL.md`. Enforce with
+`bun run arch:check`.
 
-**Layer graph:** `app.ts` / `lib/startup.ts` / `lib/cron.ts` (composition root) → `orchestration/` → `features/*` → `integrations/`, `contracts/`, `lib/`, `db/`, `plugins/`.
+**Layer graph:** `app.ts` / `index.ts` / `lib/startup.ts` / `lib/cron.ts`
+(composition root) → `orchestration/` → `features/*` → `integrations/`,
+`contracts/`, `primitives/`, `lib/`, `db/`, `plugins/`. `contracts/` may
+type-import `primitives/`.
 
 **Hard rules:**
-- A feature **never** imports another feature. Cross-feature workflows → `orchestration/` (or composition root wiring).
-- External adapters (Edupage HTTP, FCM, SMTP) → `integrations/`, not `features/`.
+
+- A feature **never** imports another feature. Cross-feature workflows →
+  `orchestration/` (or composition root wiring).
+- External adapters (Edupage HTTP, FCM, SMTP, Firebase) → `integrations/`, not
+  `features/`.
 - Shared types used by 2+ layers → `contracts/` (types only, no runtime).
-- `features/common/` in this repo = **lean, env-agnostic primitives only** (`ServiceError`, `createCache`). No HTTP, Elysia, SQLite, or domain vocabulary.
-- `src/lib/` = **this app's** infra glue (logger, config, cron, startup, `YearWeek`, `FsreError` response shape).
-- `src/plugins/` = Elysia cross-cutting plugins (e.g. `fsre-error-handler.ts`).
+  Contracts may type-import dependency-free value objects from `primitives/`.
+- Only composition root + `orchestration/` may import features; orchestration
+  uses feature barrels — not `integrations/` directly.
+- `src/primitives/` = dependency-free, reusable value objects and deterministic
+  utilities. It is not a general `shared/` folder.
+- `src/lib/` = app infra glue (logger, config, cron, startup, `ServiceError`,
+  `FsreError`).
+- `src/plugins/` = Elysia plugins used by 2+ features.
 
-**Litmus test:** own `routes/` (or cron/CLI trigger) → feature. No routes → `integrations/`, `orchestration/`, or `lib/`.
-
-**Repo is not fully VSA-compliant yet** — e.g. `features/timing/` and cross-feature imports exist. New code must move **toward** compliance; do not copy violations into greenfield work.
+**Litmus test:** own `routes/` (or another independent trigger) → feature. No
+routes → `integrations/`, `orchestration/`, `primitives/` (pure reusable value
+object/utility), or `lib/`.
